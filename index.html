@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>GuiaLucro — Calculadora de Lucro</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #f3f6fb;
+      color: #172033;
+    }
+    header {
+      background: #101827;
+      color: white;
+      padding: 25px 20px;
+    }
+    .wrap { max-width: 760px; margin: auto; }
+    .brand { font-size: 24px; font-weight: 800; }
+    .brand span { color: #55dfa1; }
+    header p { color: #c7d2e2; margin-bottom: 0; }
+    main { padding: 22px 16px 40px; }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 5px 22px #1720330b;
+    }
+    h2 { margin-top: 0; font-size: 19px; }
+    .field { margin: 17px 0; }
+    label { display: block; font-weight: 650; margin-bottom: 7px; }
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #d4dbe6;
+      border-radius: 10px;
+      font-size: 16px;
+      background: #fff;
+      color: #172033;
+    }
+    input:focus { outline: 2px solid #55dfa1; border-color: transparent; }
+    .hint { font-size: 13px; color: #69758a; margin-top: 5px; }
+    button {
+      width: 100%;
+      padding: 15px;
+      border: 0;
+      border-radius: 10px;
+      background: #087b50;
+      color: white;
+      font-size: 16px;
+      font-weight: 750;
+      cursor: pointer;
+    }
+    .result {
+      background: #e9fbf1;
+      border: 1px solid #bcebd0;
+      border-radius: 13px;
+      padding: 17px;
+      margin-top: 18px;
+    }
+    .profit { font-size: 32px; font-weight: 850; color: #087b50; }
+    .negative { color: #c33232; }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #e7ebf1;
+    }
+    .row:last-child { border-bottom: 0; }
+    .row span:last-child { text-align: right; font-weight: 700; }
+    .disclaimer { font-size: 12px; line-height: 1.5; color: #69758a; }
+    footer { text-align: center; padding: 20px; color: #69758a; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">Guia<span>Lucro</span></div>
+      <p>Entenda seus custos. Calcule seu lucro. Decida melhor.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>Calculadora de lucro</h2>
+      <p>Preencha os valores da sua venda para estimar quanto sobra depois dos custos.</p>
+
+      <form id="calculator">
+        <div class="field">
+          <label for="price">Preço de venda (R$)</label>
+          <input id="price" type="number" min="0" step="0.01" value="100" required>
+        </div>
+        <div class="field">
+          <label for="cost">Custo do produto ou serviço (R$)</label>
+          <input id="cost" type="number" min="0" step="0.01" value="45" required>
+        </div>
+        <div class="field">
+          <label for="fees">Taxas sobre a venda (%)</label>
+          <input id="fees" type="number" min="0" max="100" step="0.01" value="5" required>
+          <div class="hint">Ex.: comissão de marketplace ou taxa de pagamento.</div>
+        </div>
+        <div class="field">
+          <label for="shipping">Frete e outros custos por venda (R$)</label>
+          <input id="shipping" type="number" min="0" step="0.01" value="8" required>
+        </div>
+        <button type="submit">Calcular meu lucro</button>
+      </form>
+
+      <div class="result" aria-live="polite">
+        <div>Lucro estimado por venda</div>
+        <div id="profit" class="profit">R$ 42,00</div>
+        <div id="status">Margem estimada: 42,00%</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Resumo da venda</h2>
+      <div class="row"><span>Receita da venda</span><span id="revenue">R$ 100,00</span></div>
+      <div class="row"><span>Custo do produto/serviço</span><span id="costOut">R$ 45,00</span></div>
+      <div class="row"><span>Taxas estimadas</span><span id="feesOut">R$ 5,00</span></div>
+      <div class="row"><span>Frete e outros custos</span><span id="shippingOut">R$ 8,00</span></div>
+      <div class="row"><span>Custos totais</span><span id="total">R$ 58,00</span></div>
+      <div class="row"><span>Margem sobre a venda</span><span id="margin">42,00%</span></div>
+    </section>
+
+    <section class="card">
+      <h2>Quanto preciso cobrar?</h2>
+      <p>Defina seu lucro desejado e descubra um preço de venda estimado, usando os custos da calculadora acima.</p>
+      <div class="field">
+        <label for="targetProfit">Lucro desejado por venda (R$)</label>
+        <input id="targetProfit" type="number" min="0" step="0.01" value="50">
+      </div>
+      <button type="button" id="targetButton">Calcular preço necessário</button>
+      <div class="result" aria-live="polite">
+        <div>Preço de venda estimado</div>
+        <div id="targetPrice" class="profit">R$ 161,11</div>
+        <div id="targetDetails">Inclui os custos informados e a taxa percentual.</div>
+      </div>
+      <p class="disclaimer">Estimativa baseada nos valores informados. Impostos e despesas não incluídos nesses valores não serão considerados.</p>
+    </section>
+
+    <section class="card">
+      <h2>Como interpretar</h2>
+      <p>O lucro estimado é o preço de venda menos os custos informados. A margem mostra qual porcentagem da receita sobra depois desses custos.</p>
+      <p class="disclaimer">Esta é uma estimativa, não uma garantia de lucro. Inclua impostos, despesas fixas, devoluções e outros custos relevantes para obter uma estimativa mais completa. Os valores não são enviados a um servidor por esta página.</p>
+    </section>
+  </main>
+
+  <footer>GuiaLucro · Ferramenta gratuita em desenvolvimento</footer>
+
+  <script>
+    const form = document.getElementById('calculator');
+    const fields = ['price', 'cost', 'fees', 'shipping'];
+    const money = value => value.toLocaleString('pt-BR', {
+      style: 'currency', currency: 'BRL'
+    });
+    const percent = value => value.toLocaleString('pt-BR', {
+      minimumFractionDigits: 2, maximumFractionDigits: 2
+    }) + '%';
+
+    function calculate(event) {
+      if (event) event.preventDefault();
+
+      const price = Number(document.getElementById('price').value);
+      const cost = Number(document.getElementById('cost').value);
+      const feeRate = Number(document.getElementById('fees').value);
+      const shipping = Number(document.getElementById('shipping').value);
+
+      if (![price, cost, feeRate, shipping].every(Number.isFinite) ||
+          price < 0 || cost < 0 || shipping < 0 ||
+          feeRate < 0 || feeRate > 100) {
+        document.getElementById('status').textContent =
+          'Confira os valores: eles precisam ser válidos e não negativos.';
+        return;
+      }
+
+      const fees = price * feeRate / 100;
+      const total = cost + fees + shipping;
+      const profit = price - total;
+      const margin = price > 0 ? profit / price * 100 : 0;
+
+      document.getElementById('profit').textContent = money(profit);
+      document.getElementById('profit').classList.toggle('negative', profit < 0);
+      document.getElementById('status').textContent =
+        'Margem estimada: ' + percent(margin);
+      document.getElementById('revenue').textContent = money(price);
+      document.getElementById('costOut').textContent = money(cost);
+      document.getElementById('feesOut').textContent = money(fees);
+      document.getElementById('shippingOut').textContent = money(shipping);
+      document.getElementById('total').textContent = money(total);
+      document.getElementById('margin').textContent = percent(margin);
+    }
+
+    form.addEventListener('submit', calculate);
+    fields.forEach(id =>
+      document.getElementById(id).addEventListener('input', calculate)
+    );
+    calculate();
+  </script>
+
+  <script>
+    document.getElementById('targetButton').addEventListener('click', function () {
+      const cost = Number(document.getElementById('cost').value);
+      const fees = Number(document.getElementById('fees').value);
+      const shipping = Number(document.getElementById('shipping').value);
+      const goal = Number(document.getElementById('targetProfit').value);
+      const output = document.getElementById('targetPrice');
+      const details = document.getElementById('targetDetails');
+
+      if (![cost, fees, shipping, goal].every(Number.isFinite) ||
+          cost < 0 || shipping < 0 || goal < 0 || fees < 0 || fees >= 100) {
+        output.textContent = 'Confira os valores';
+        details.textContent = 'Os custos e a meta devem ser não negativos, e a taxa deve ser inferior a 100%.';
+        return;
+      }
+
+      const price = (cost + shipping + goal) / (1 - fees / 100);
+      output.textContent = price.toLocaleString('pt-BR', {
+        style: 'currency', currency: 'BRL'
+      });
+      details.textContent = 'Preço estimado para alcançar a meta informada, antes de custos adicionais não incluídos.';
+    });
+  </script>
+
+</body>
+</html>
