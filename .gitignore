@@ -1,0 +1,4 @@
+public/index.html.bak
+.guialucro-check-*.js
+node_modules/
+.env
